@@ -1,0 +1,2 @@
+version=3
+https://github.com/rthomsen/kcmsystemd//releases .*/(?:kcmsystemd-)?(\d\S+)\.tar\.(?:bz2|gz|xz)

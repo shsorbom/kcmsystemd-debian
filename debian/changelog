@@ -1,0 +1,5 @@
+kcmsystemd (0.7.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Shawn Sörbom <shawn@sorbom.com>  Fri, 26 Sep 2014 17:35:18 -0700
