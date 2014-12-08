@@ -1,18 +1,23 @@
-Source: kcmsystemd
+Source: kcm-systemd
 Section: kde
 Priority: optional
 Maintainer: Shawn Sörbom <shawn@sorbom.com>
 Build-Depends: debhelper (>= 9), cmake, libboost-chrono1.55-dev, libboost-system1.55-dev, libboost-filesystem1.55-dev, kdelibs5-dev
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Homepage: https://github.com/rthomsen/kcmsystemd
 #Vcs-Git: git://anonscm.debian.org/collab-maint/kcmsystemd.git
 #Vcs-Browser: http://anonscm.debian.org/?p=collab-maint/kcmsystemd.git;a=summary
 
-Package: kcmsystemd
+Package: kcm-systemd
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, systemd, libboost-chrono1.55.0, libboost-system1.55.0, libboost-filesystem1.55.0, kdelibs-bin
 Description: KDE control center module for Systemd
- Systemd control module for KDE. Provides a graphical frontend for the systemd daemon, which allows for viewing and controlling systemd units, as well as modifying configuration files.
+ This package is a KDE Control Center module for the systemd daemon.
+ Kcm-systemd is capable of starting and stopping systemd units.
+ In addition, it allows for the configuration of several systemd
+ parameters.
  .
- Integrates in the System Settings dialogue in KDE. Can also be run by issuing the command:
+ This module can be found under the "System administration"
+ catagory in the KDE Control Center. 
+ It can also be run by issuing the command:
  kcmshell4 kcm_systemd
