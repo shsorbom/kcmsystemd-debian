@@ -1,4 +1,4 @@
-kcmsystemd (0.7.0-1) experimental; urgency=low
+kcm-systemd (0.7.0-1) experimental; urgency=low
 
   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
 
