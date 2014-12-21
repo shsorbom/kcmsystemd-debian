@@ -1,5 +1,5 @@
 kcm-systemd (0.7.0-1) experimental; urgency=low
 
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * Initial release (Closes: #773617)  
 
- -- Shawn Sörbom <shawn@sorbom.com>  Sun, 07 Dec 2014 20:52:19 -0800
+ -- Shawn Sörbom <shawn@sorbom.com>  Sun, 21 Dec 2014 14:10:22 -0800
