@@ -16,4 +16,3 @@ Description: KDE control center module for Systemd
  Kcm-systemd is capable of starting and stopping systemd units.
  In addition, it allows for the configuration of several systemd
  parameters.
- 
