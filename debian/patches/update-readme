@@ -1,0 +1,17 @@
+Description: readme updated for correctness
+  Apostrophes added to indicate command execution. 
+  This is an upsteam change
+  
+--- kcm-systemd-0.7.0.orig/README.md
++++ kcm-systemd-0.7.0/README.md
+@@ -25,8 +25,8 @@ Dependencies
+ 
+ Execution
+ ---------
+-Kcmsystemd can be accessed through System Settings, or by issuing the command:
+-kcmshell4 kcm_systemd
++Kcmsystemd can be accessed through System Settings, or by issuing the command:  
++`kcmshell4 kcm_systemd`
+ 
+ 
+ Developed by: Ragnar Thomsen (rthomsen6@gmail.com)  
