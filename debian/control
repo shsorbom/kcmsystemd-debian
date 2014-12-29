@@ -1,4 +1,4 @@
-Source: kcm-systemd
+Source: kde-config-systemd
 Section: kde
 Priority: optional
 Maintainer: Shawn Sörbom <shawn@sorbom.com>
@@ -8,11 +8,11 @@ Homepage: https://github.com/rthomsen/kcmsystemd
 Vcs-Git: https://github.com/shsorbom/kcmsystemd-debian.git
 Vcs-Browser: https://github.com/shsorbom/kcmsystemd-debian.git
 
-Package: kcm-systemd
+Package: kde-config-systemd
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, systemd (>= 215)
 Description: KDE control center module for Systemd
  This package is a KDE Control Center module for the systemd daemon.
- Kcm-systemd is capable of starting and stopping systemd units.
+ It is capable of starting and stopping systemd units.
  In addition, it allows for the configuration of several systemd
  parameters.

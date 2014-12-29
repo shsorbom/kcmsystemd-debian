@@ -1,5 +1,5 @@
-kcm-systemd (0.7.0-1) experimental; urgency=low
+kde-config-systemd (0.7.0-1) experimental; urgency=low
 
   * Initial release (Closes: #773617)  
 
- -- Shawn Sörbom <shawn@sorbom.com>  Sun, 21 Dec 2014 14:10:22 -0800
+ -- Shawn Sörbom <shawn@sorbom.com>  Mon, 29 Dec 2014 00:03:06 -0800
