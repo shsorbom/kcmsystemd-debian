@@ -1,0 +1,34 @@
+Description: Disable coredump features, as debian doesn't support them
+Author: Shawn Sörbom
+Date: January 14,2015
+--- a/src/kcmsystemd.cpp
++++ b/src/kcmsystemd.cpp
+@@ -76,8 +76,8 @@
+       ui.chkForwardToWall_1->setEnabled(false);
+       ui.cmbMaxLevelWall_1->setEnabled(false);
+     }
+-    if (systemdVersion >= 215)
+-      ui.tabCoredump->setEnabled(true);
++    //if (systemdVersion >= 215)
++      //ui.tabCoredump->setEnabled(true);
+ 
+     qDebug() << "Systemd" << systemdVersion << "detected.";
+   } else {
+@@ -224,8 +224,8 @@
+   readConfFile("system.conf");
+   readConfFile("journald.conf");
+   readConfFile("logind.conf");
+-  if (systemdVersion >= 215)
+-    readConfFile("coredump.conf");
++  //if (systemdVersion >= 215)
++    //readConfFile("coredump.conf");
+   
+   // Apply the read settings to the interface
+   applyToInterface();
+@@ -1719,4 +1719,4 @@
+   Qt::SortOrder order = ui.tblServices->horizontalHeader()->sortIndicatorOrder();
+   ui.tblServices->sortByColumn(section, order);
+   updateUnitCount();
+-}
+\ No newline at end of file
++}
