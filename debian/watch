@@ -1,2 +1,2 @@
 version=3
-https://github.com/rthomsen/kcmsystemd//releases .*/(?:kcmsystemd-)?(\d\S+)\.tar\.(?:bz2|gz|xz)
+http://download.kde.org/stable/systemd-kcm/ systemd-kcm-?(\d\S+)\.tar\.(?:bz2|gz|xz)
