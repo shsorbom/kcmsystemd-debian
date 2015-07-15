@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright (C) 2013-2014 Ragnar Thomsen <rthomsen6@gmail.com>                *
+ * Copyright (C) 2013-2015 Ragnar Thomsen <rthomsen6@gmail.com>                *
  *                                                                             *
  * This program is free software: you can redistribute it and/or modify it     *
  * under the terms of the GNU General Public License as published by the Free  *
- * Software Foundation, either version 3 of the License, or (at your option)   *
+ * Software Foundation, either version 2 of the License, or (at your option)   *
  * any later version.                                                          *
  *                                                                             *
  * This program is distributed in the hope that it will be useful, but WITHOUT *
@@ -18,32 +18,22 @@
 #ifndef KCMSYSTEMD_H
 #define KCMSYSTEMD_H
 
-#include <QtDBus>
+#include <QtDBus/QtDBus>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
+#include <QDialog>
 
 #include <KCModule>
-#include "ui_kcmsystemd.h"
-#include "confoption.h"
+#include <KLocalizedString>
+#include <KMessageWidget>
 
-// struct for storing units retrieved from systemd via DBus
-struct SystemdUnit
-{
-  QString id, description, load_state, active_state, sub_state, following, job_type;
-  QDBusObjectPath unit_path, job_path;
-  unsigned int job_id;
-  
-  // The == operator must be provided to use contains() and indexOf()
-  // on QLists of this struct
-  bool operator==(const SystemdUnit& right) const
-  {
-    if (id == right.id)
-      return true;
-    else
-      return false;
-  }
-};
-Q_DECLARE_METATYPE(SystemdUnit)
+#include "ui_kcmsystemd.h"
+#include "systemdunit.h"
+#include "unitmodel.h"
+#include "sortfilterunitmodel.h"
+#include "confoption.h"
+#include "confmodel.h"
+#include "confdelegate.h"
 
 struct unitfile
 {
@@ -58,74 +48,96 @@ struct unitfile
   }
 };
 
+enum dbusConn
+{
+  systemd, logind
+};
+
+enum dbusIface
+{
+  sysdMgr, sysdUnit, sysdTimer, logdMgr, logdSession
+};
+
 class kcmsystemd : public KCModule
 {
   Q_OBJECT
 
   public:
-    explicit kcmsystemd(QWidget *parent = 0, const QVariantList &list = QVariantList());
+    explicit kcmsystemd(QWidget *parent,  const QVariantList &args);
+    ~kcmsystemd();
     void defaults();
     void load();
     void save();
-        
+    static ConfModel *confModel;
+    static QList<confOption> confOptList;
+
   private:
     Ui::kcmsystemd ui;
     void setupSignalSlots();
-    void initializeInterface();
     void setupUnitslist();
-    void readConfFile(QString);
-    void applyToInterface();
-    void authServiceAction(QString, QString, QString, QString, QList<QVariant>);    
+    void setupConf();
+    void setupSessionlist();
+    void setupTimerlist();
+    void readConfFile(int);
+    void authServiceAction(QString, QString, QString, QString, QList<QVariant>);
     bool eventFilter(QObject *, QEvent*);
-    void updateUnitProps(QString);
     void updateUnitCount();
     void setupConfigParms();
+    void displayMsgWidget(KMessageWidget::MessageType type, QString msg);
+    QList<SystemdUnit> getUnitsFromDbus(dbusBus bus);
+    QVariant getDbusProperty(QString prop, dbusIface ifaceName, QDBusObjectPath path = QDBusObjectPath("/org/freedesktop/systemd1"), dbusBus bus = sys);
+    QDBusMessage callDbusMethod(QString method, dbusIface ifaceName, dbusBus bus = sys, const QList<QVariant> &args = QList<QVariant> ());
+    QList<QStandardItem *> buildTimerListRow(const SystemdUnit &unit, const QList<SystemdUnit> &list, dbusBus bus);
     QProcess *kdeConfig;
-    QVariantMap unitpaths;
-    QSortFilterProxyModel *proxyModelUnitId, *proxyModelAct;
-    QStandardItemModel *unitsModel;
-    QList<SystemdUnit> unitslist;
-    QList<unitfile> unitfileslist;
-    QList<confOption> confOptList;
-    QString kdePrefix, selectedUnit, etcDir, filterUnitType, searchTerm;
+    QSortFilterProxyModel *proxyModelConf;
+    SortFilterUnitModel *systemUnitFilterModel, *userUnitFilterModel;
+    QStandardItemModel *sessionModel, *timerModel;
+    UnitModel *systemUnitModel, *userUnitModel;
+    QList<SystemdUnit> unitslist, userUnitslist;
+    QList<SystemdSession> sessionlist;
+    QStringList listConfFiles;
+    QString kdePrefix, etcDir, userBusPath;
     QMenu *contextMenuUnits;
     QAction *actEnableUnit, *actDisableUnit;
-    int systemdVersion, timesLoad, lastRowChecked, selectedRow, noActUnits;
+    int systemdVersion, timesLoad = 0, lastUnitRowChecked = -1, lastSessionRowChecked = -1, noActSystemUnits, noActUserUnits;
     qulonglong partPersSizeMB, partVolaSizeMB;
-    bool isPersistent, varLogDirExists;
+    bool enableUserUnits = true;
+    QTimer *timer;
+    const QStringList unitTypeSufx = QStringList() << "" << ".target" << ".service" << ".device" << ".mount"
+                                                   << ".automount" << ".swap" << ".socket" << ".path"
+                                                   << ".timer" << ".snapshot" << ".slice" << ".scope";
+    const QString connSystemd = "org.freedesktop.systemd1";
+    const QString connLogind = "org.freedesktop.login1";
+    const QString pathSysdMgr = "/org/freedesktop/systemd1";
+    const QString pathLogdMgr = "/org/freedesktop/login1";
+    const QString ifaceMgr = "org.freedesktop.systemd1.Manager";
+    const QString ifaceLogdMgr = "org.freedesktop.login1.Manager";
+    const QString ifaceUnit = "org.freedesktop.systemd1.Unit";
+    const QString ifaceTimer = "org.freedesktop.systemd1.Timer";
+    const QString ifaceSession = "org.freedesktop.login1.Session";
+    const QString ifaceDbusProp = "org.freedesktop.DBus.Properties";
+    QDBusConnection systembus = QDBusConnection::systemBus();
 
   private slots:
     void slotKdeConfig();
-    void slotTblRowChanged(const QModelIndex &, const QModelIndex &);
-    void slotBtnStartUnit();
-    void slotBtnStopUnit();    
-    void slotBtnRestartUnit();
-    void slotBtnReloadUnit(); 
-    void slotChkShowUnits();
-    void slotCmbUnitTypes();
-    void slotDisplayMenu(const QPoint &);
-    void slotRefreshUnitsList();
-    void slotSystemdReloading(bool);
+    void slotChkShowUnits(int);
+    void slotCmbUnitTypes(int);
+    void slotUnitContextMenu(const QPoint &);
+    void slotSessionContextMenu(const QPoint &);
+    void slotRefreshUnitsList(bool, dbusBus);
+    void slotRefreshSessionList();
+    void slotRefreshTimerList();
+    void slotSystemSystemdReloading(bool);
+    void slotUserSystemdReloading(bool);
+    void slotSystemUnitsChanged();
+    void slotUserUnitsChanged();
     // void slotUnitLoaded(QString, QDBusObjectPath);
     // void slotUnitUnloaded(QString, QDBusObjectPath);
-    void slotUnitFilesChanged();
-    void slotPropertiesChanged(QString, QVariantMap, QStringList);
+    void slotLogindPropertiesChanged(QString, QVariantMap, QStringList);
     void slotLeSearchUnitChanged(QString);
-    void slotOpenResourceLimits();
-    void slotOpenEnviron();
-    void slotOpenAdvanced();
-    void slotJrnlStorageChanged(int);
-    void slotFwdToSyslogChanged();
-    void slotFwdToKmsgChanged();
-    void slotFwdToConsoleChanged();
-    void slotFwdToWallChanged();
-    void slotJrnlStorageChkBoxes(int);
-    void slotSpnMaxUseChanged();
-    void slotSpnKeepFreeChanged();
-    void slotSpnMaxFileSizeChanged();
-    void slotKillUserProcessesChanged();
-    void slotUpdateConfOption();
-    void slotCoreStorageChanged(int);
+    void slotConfChanged(const QModelIndex &, const QModelIndex &);
+    void slotCmbConfFileChanged(int);
+    void slotUpdateTimers();
 };
 
 #endif // kcmsystemd_H

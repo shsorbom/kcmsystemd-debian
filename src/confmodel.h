@@ -15,19 +15,23 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
  *******************************************************************************/
 
-#ifndef HELPER_H
-#define HELPER_H
+#ifndef CONFMODEL_H
+#define CONFMODEL_H
 
-#include <KAuth>
-using namespace KAuth;
+#include <QAbstractTableModel>
 
-class Helper : public QObject
+class ConfModel : public QAbstractTableModel
 {
   Q_OBJECT
-
-  public Q_SLOTS:
-    ActionReply save(const QVariantMap& args);
-    ActionReply dbusaction(const QVariantMap& args);
+  
+public:
+  ConfModel(QObject *parent = 0);
+  int rowCount(const QModelIndex & parent = QModelIndex()) const;
+  int columnCount(const QModelIndex & parent = QModelIndex()) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+  virtual bool setData(const QModelIndex & index, const QVariant & value, int role);
+  Qt::ItemFlags flags (const QModelIndex & index) const;
 };
-
-#endif
+  
+#endif // CONFMODEL_H

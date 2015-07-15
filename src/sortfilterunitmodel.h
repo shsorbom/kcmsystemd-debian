@@ -15,19 +15,30 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
  *******************************************************************************/
 
-#ifndef HELPER_H
-#define HELPER_H
+#ifndef SORTFILTERUNITMODEL_H
+#define SORTFILTERUNITMODEL_H
 
-#include <KAuth>
-using namespace KAuth;
+#include <QSortFilterProxyModel>
 
-class Helper : public QObject
+enum filterType
+{
+  activeState, unitType, unitName
+};
+
+class SortFilterUnitModel : public QSortFilterProxyModel
 {
   Q_OBJECT
 
-  public Q_SLOTS:
-    ActionReply save(const QVariantMap& args);
-    ActionReply dbusaction(const QVariantMap& args);
+public:
+  SortFilterUnitModel(QObject *parent = 0);
+  void initFilterMap(const QMap<filterType, QString> &map);
+  void addFilterRegExp(filterType type, const QString &pattern);
+
+protected:
+  bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+
+private:
+  QMap<filterType, QString> filtersMap;
 };
 
-#endif
+#endif // SORTFILTERUNITMODEL_H
