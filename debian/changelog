@@ -1,0 +1,14 @@
+kde-config-systemd (1.2.0-1) unnstable; urgency=medium
+
+  * New upstream release
+  * update debian control file to iinnclude new KF5 dependencies
+  * update debian copyright to comply with upstream license change
+  * Change links to refer to new ustream site 
+
+ -- Shawn Sorbom <shawn@sorbom.com>  Wed, 15 Jul 2015 18:18:35 -0700
+
+kde-config-systemd (0.7.0-1) experimental; urgency=low
+
+  * Initial release (Closes: #773617)  
+
+ -- Shawn Sörbom <shawn@sorbom.com>  Mon, 29 Dec 2014 00:03:06 -0800
