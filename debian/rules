@@ -6,4 +6,5 @@ export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 %:
 	dh $@ 
 
-
+override_dh_auto_configure:
+	dh_auto_configure -- -DCMAKE_INSTALL_PLUGINDIR=/usr/lib/x86_64-linux-gnu/qt5/plugins/
