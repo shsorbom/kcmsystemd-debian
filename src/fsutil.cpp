@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2013-2015 Ragnar Thomsen <rthomsen6@gmail.com>                *
+ * Copyright (C) 2015 Johan Ouwerkerk <jm.ouwerkerk@gmail.com>                 *
  *                                                                             *
  * This program is free software: you can redistribute it and/or modify it     *
  * under the terms of the GNU General Public License as published by the Free  *
@@ -15,20 +15,24 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
  *******************************************************************************/
 
-#ifndef HELPER_H
-#define HELPER_H
+#include "fsutil.h"
 
-#include <KAuth>
-using namespace KAuth;
+#include <QtDebug>
+#include <kdiskfreespaceinfo.h>
 
-class Helper : public QObject
-{
-  Q_OBJECT
+qulonglong getPartitionSize(const QString &path, bool *ok) {
 
-  public Q_SLOTS:
-    ActionReply save(const QVariantMap& args);
-    ActionReply saveunitfile(const QVariantMap& args);
-    ActionReply dbusaction(const QVariantMap& args);
-};
+  KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(path);
+  bool valid = info.isValid();
 
-#endif
+  if (ok) {
+    *ok = valid;
+  }
+
+  if (!valid) {
+    qDebug() << "Unable to determine size of partition:" << path;
+    return 0UL;
+  }
+
+  return info.size();
+}

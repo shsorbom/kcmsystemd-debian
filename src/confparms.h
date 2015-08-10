@@ -15,20 +15,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
  *******************************************************************************/
 
-#ifndef HELPER_H
-#define HELPER_H
+#ifndef CONFPARMS_H
+#define CONFPARMS_H
 
-#include <KAuth>
-using namespace KAuth;
+#include <QList>
 
-class Helper : public QObject
-{
-  Q_OBJECT
+#include "confoption.h"
 
-  public Q_SLOTS:
-    ActionReply save(const QVariantMap& args);
-    ActionReply saveunitfile(const QVariantMap& args);
-    ActionReply dbusaction(const QVariantMap& args);
-};
+QList<confOption> getConfigParms(const int systemdVersion);
 
 #endif

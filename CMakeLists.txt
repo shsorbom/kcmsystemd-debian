@@ -1,16 +1,15 @@
 project(SYSTEMD-KCM)
-set(PROJECT_VERSION "1.2.0")
+set(PROJECT_VERSION "1.2.1")
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
-set(QT_MIN_VERSION "5.0.0")
-set(KF5_MIN_VERSION "5.0.0")
+set(QT_MIN_VERSION "5.2.0")
+set(KF5_MIN_VERSION "5.1.0")
 
 # Silence a warning
 cmake_policy(SET CMP0037 OLD)
 
-find_package(ECM REQUIRED NO_MODULE)
+find_package(ECM 1.1.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
-
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -19,12 +18,13 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
              DBus)
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
-             CoreAddons
-             WidgetsAddons
+             Auth
              ConfigWidgets
+             CoreAddons
+             Crash
              I18n
-             Service
-             Auth)
+             KIO
+             WidgetsAddons)
 
 include(KDEInstallDirs)
 include(KDECompilerSettings)
@@ -45,6 +45,12 @@ if(SYSTEMD_FOUND)
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
+# Adding local CMake modules
+set (
+   CMAKE_MODULE_PATH
+   ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
+   ${CMAKE_MODULE_PATH}
+   )
 
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/src/config.h)
 

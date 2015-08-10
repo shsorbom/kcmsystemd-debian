@@ -68,8 +68,6 @@ class kcmsystemd : public KCModule
     void defaults();
     void load();
     void save();
-    static ConfModel *confModel;
-    static QList<confOption> confOptList;
 
   private:
     Ui::kcmsystemd ui;
@@ -82,21 +80,23 @@ class kcmsystemd : public KCModule
     void authServiceAction(QString, QString, QString, QString, QList<QVariant>);
     bool eventFilter(QObject *, QEvent*);
     void updateUnitCount();
-    void setupConfigParms();
     void displayMsgWidget(KMessageWidget::MessageType type, QString msg);
     QList<SystemdUnit> getUnitsFromDbus(dbusBus bus);
     QVariant getDbusProperty(QString prop, dbusIface ifaceName, QDBusObjectPath path = QDBusObjectPath("/org/freedesktop/systemd1"), dbusBus bus = sys);
     QDBusMessage callDbusMethod(QString method, dbusIface ifaceName, dbusBus bus = sys, const QList<QVariant> &args = QList<QVariant> ());
     QList<QStandardItem *> buildTimerListRow(const SystemdUnit &unit, const QList<SystemdUnit> &list, dbusBus bus);
-    QProcess *kdeConfig;
+    void editUnitFile(const QString &filename);
+
+    QList<confOption> confOptList;
     QSortFilterProxyModel *proxyModelConf;
+    ConfModel *confModel;
     SortFilterUnitModel *systemUnitFilterModel, *userUnitFilterModel;
     QStandardItemModel *sessionModel, *timerModel;
     UnitModel *systemUnitModel, *userUnitModel;
     QList<SystemdUnit> unitslist, userUnitslist;
     QList<SystemdSession> sessionlist;
     QStringList listConfFiles;
-    QString kdePrefix, etcDir, userBusPath;
+    QString etcDir, userBusPath;
     QMenu *contextMenuUnits;
     QAction *actEnableUnit, *actDisableUnit;
     int systemdVersion, timesLoad = 0, lastUnitRowChecked = -1, lastSessionRowChecked = -1, noActSystemUnits, noActUserUnits;
@@ -119,7 +119,6 @@ class kcmsystemd : public KCModule
     QDBusConnection systembus = QDBusConnection::systemBus();
 
   private slots:
-    void slotKdeConfig();
     void slotChkShowUnits(int);
     void slotCmbUnitTypes(int);
     void slotUnitContextMenu(const QPoint &);

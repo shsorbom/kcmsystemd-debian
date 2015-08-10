@@ -15,11 +15,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
  *******************************************************************************/
 
-#include <QDebug>
-
-#include <boost/filesystem.hpp>
-
 #include "confoption.h"
+#include "fsutil.h"
+
+#include <QDebug>
 
 // Initialize two static class members
 QStringList confOption::capabilities = QStringList() << "CAP_AUDIT_CONTROL" << "CAP_AUDIT_WRITE" << "CAP_BLOCK_SUSPEND" << "CAP_CHOWN"
@@ -54,7 +53,7 @@ confOption::confOption(QVariantMap map)
 {
   file = static_cast<confFile>(map["file"].toInt());
   realName = map["name"].toString();
-  uniqueName = QString(map["name"].toString() + "_" + QString::number(file));
+  uniqueName = QString(map["name"].toString() + '_' + QString::number(file));
   type = static_cast<settingType>(map["type"].toInt());
   defVal = map["defVal"];
   possibleVals = map["possibleVals"].toStringList();
@@ -75,10 +74,11 @@ confOption::confOption(QVariantMap map)
 
   if (type == MULTILIST)
   {
-    // Create a map where all possibleVals are set to false
+    // Create a map where all possibleVals are set to false.
     QVariantMap defMap;
-    foreach (QString s, possibleVals)
+    foreach (const QString &s, possibleVals) {
       defMap[s] = false;
+    }
     defVal = defMap;
   }
   if (type == RESLIMIT)
@@ -98,7 +98,7 @@ int confOption::setValueFromFile(QString line)
 {
   // Used to set values in confOptions from a file line
   
-  QString rval = line.section("=",1).trimmed();
+  QString rval = line.section('=',1).trimmed();
 
   qDebug() << "setting " << realName << " to " << rval << " (from file)";
     
@@ -160,7 +160,7 @@ int confOption::setValueFromFile(QString line)
   {
     QVariantMap map;
 
-    QStringList readList = rval.split(" ", QString::SkipEmptyParts);
+    QStringList readList = rval.split(' ', QString::SkipEmptyParts);
     for (int i = 0; i < readList.size(); ++i)
     {
       if (!possibleVals.contains(readList.at(i)))
@@ -374,15 +374,19 @@ int confOption::setValueFromFile(QString line)
         // This option supports both size units and %
         if (rxSize.cap(2) == "%") {
           value = rxSize.cap(1).toInt();
-        } else {
-          // Use boost to find volatile partition size
-          boost::filesystem::path pv ("/run");
-          boost::filesystem::space_info logVpart = boost::filesystem::space(pv);
-          qulonglong sizeMB = logVpart.capacity / 1024 / 1024;
 
-          // Convert the size to percentage. maxVal contains the volatile
-          // partitions size, which is half the RAM size.
-          value = 100 * value.toDouble() / (2 * sizeMB);
+        } else {
+
+          bool ok = false;
+          qulonglong sizeMB = getPartitionSize("/run", &ok) / 1024 / 1024;
+          if (!ok) {
+            qDebug() << rval << "cannot be interpreted correctly with an unknown partition size. Ignoring...";
+            return -1;
+          }
+
+          // Convert the size to percentage of physical RAM. The volatile
+          // partition size should be half the physical RAM.
+          value = 50 * value.toDouble() / sizeMB;
         }
       }
 
@@ -430,7 +434,7 @@ QString confOption::getValueAsString() const
       if (iter.value() == true && mapAsString.isEmpty())
         mapAsString = QString(iter.key());
       else if (iter.value() == true)
-        mapAsString = QString(mapAsString + " " + iter.key());
+        mapAsString = QString(mapAsString + ' ' + iter.key());
     }
     return mapAsString;
   }
@@ -444,7 +448,7 @@ QString confOption::getLineForFile() const
   if (value == defVal)
   {
     // value is set to default
-    return QString("#" + realName + "=\n");
+    return QString('#' + realName + "=\n");
   }
   else
   {
@@ -452,9 +456,9 @@ QString confOption::getLineForFile() const
     if (type == BOOL)
     {
       if (value.toBool())
-        return QString(realName + "=" + "yes\n");
+        return QString(realName + '=' + "yes\n");
       else
-        return QString(realName + "=" + "no\n");
+        return QString(realName + '=' + "no\n");
     }
 
     else if (type == MULTILIST)
@@ -466,47 +470,47 @@ QString confOption::getLineForFile() const
         for(QVariantMap::const_iterator iter = map.constBegin(); iter != map.constEnd(); ++iter)
         {
           if (iter.value().toBool())
-            ret = QString(ret + iter.key() + " ");
+            ret = QString(ret + iter.key() + ' ');
         }
-        return QString(realName + "=" + ret.trimmed() + "\n");
+        return QString(realName + '=' + ret.trimmed() + '\n');
       }
     }
 
     else if (type == TIME)
     {
       if (value.toULongLong() == 0)
-        return QString(realName + "=" + value.toString() + "\n");
+        return QString(realName + '=' + value.toString() + '\n');
       else
       {
         if (defUnit == ns)
-          return QString(realName + "=" + value.toString() + "ns\n");
+          return QString(realName + '=' + value.toString() + "ns\n");
         else if (defUnit == us)
-          return QString(realName + "=" + value.toString() + "us\n");
+          return QString(realName + '=' + value.toString() + "us\n");
         else if (defUnit == ms)
-          return QString(realName + "=" + value.toString() + "ms\n");
+          return QString(realName + '=' + value.toString() + "ms\n");
         else if (defUnit == s)
-          return QString(realName + "=" + value.toString() + "s\n");
+          return QString(realName + '=' + value.toString() + "s\n");
         else if (defUnit == min)
-          return QString(realName + "=" + value.toString() + "min\n");
+          return QString(realName + '=' + value.toString() + "min\n");
         else if (defUnit == h)
-          return QString(realName + "=" + value.toString() + "h\n");
+          return QString(realName + '=' + value.toString() + "h\n");
         else if (defUnit == d)
-          return QString(realName + "=" + value.toString() + "d\n");
+          return QString(realName + '=' + value.toString() + "d\n");
         else if (defUnit == w)
-          return QString(realName + "=" + value.toString() + "w\n");
+          return QString(realName + '=' + value.toString() + "w\n");
         else if (defUnit == month)
-          return QString(realName + "=" + value.toString() + "month\n");
+          return QString(realName + '=' + value.toString() + "month\n");
         else if (defUnit == year)
-          return QString(realName + "=" + value.toString() + "year\n");
+          return QString(realName + '=' + value.toString() + "year\n");
        }
     }
 
     else if (type == SIZE)
     {
-      return QString(realName + "=" + value.toString() + "M\n");
+      return QString(realName + '=' + value.toString() + "M\n");
     }
 
-    return QString(realName + "=" + value.toString() + "\n");
+    return QString(realName + '=' + value.toString() + '\n');
   } // not default
 }
 
@@ -539,74 +543,74 @@ QVariant confOption::convertTimeUnit(double value, timeUnit oldTime, timeUnit ne
   if (oldTime == ns)
   {
     nanoseconds val(value);
-    tmpSecs = boost::chrono::duration_cast<seconds>(val);
+    tmpSecs = chrono::duration_cast<seconds>(val);
   }
   else if (oldTime == us)
   {
     microseconds val(value);
-    tmpSecs = boost::chrono::duration_cast<seconds>(val);
+    tmpSecs = chrono::duration_cast<seconds>(val);
   }
   else if (oldTime == ms)
   {
     milliseconds val(value);
-    tmpSecs = boost::chrono::duration_cast<seconds>(val);
+    tmpSecs = chrono::duration_cast<seconds>(val);
   }
   else if (oldTime == s)
   {
     seconds val(value);
-    tmpSecs = boost::chrono::duration_cast<seconds>(val);
+    tmpSecs = chrono::duration_cast<seconds>(val);
   }
   else if (oldTime == min)
   {
     minutes val(value);
-    tmpSecs = boost::chrono::duration_cast<seconds>(val);
+    tmpSecs = chrono::duration_cast<seconds>(val);
   }
   else if (oldTime == h)
   {
     hours val(value);
-    tmpSecs = boost::chrono::duration_cast<seconds>(val);
+    tmpSecs = chrono::duration_cast<seconds>(val);
   }
   else if (oldTime == d)
   {
     days val(value);
-    tmpSecs = boost::chrono::duration_cast<seconds>(val);
+    tmpSecs = chrono::duration_cast<seconds>(val);
   }
   else if (oldTime == w)
   {
     weeks val(value);
-    tmpSecs = boost::chrono::duration_cast<seconds>(val);
+    tmpSecs = chrono::duration_cast<seconds>(val);
   }
   else if (oldTime == month)
   {
     months val(value);
-    tmpSecs = boost::chrono::duration_cast<seconds>(val);
+    tmpSecs = chrono::duration_cast<seconds>(val);
   }
   else if (oldTime == year)
   {
     years val(value);
-    tmpSecs = boost::chrono::duration_cast<seconds>(val);
+    tmpSecs = chrono::duration_cast<seconds>(val);
   }
     
   if (newTime == ns)
-    convertedVal = boost::chrono::duration_cast<nanoseconds>(tmpSecs).count();
+    convertedVal = chrono::duration_cast<nanoseconds>(tmpSecs).count();
   else if (newTime == us)
-    convertedVal = boost::chrono::duration_cast<microseconds>(tmpSecs).count();
+    convertedVal = chrono::duration_cast<microseconds>(tmpSecs).count();
   else if (newTime == ms)
-    convertedVal = boost::chrono::duration_cast<milliseconds>(tmpSecs).count();
+    convertedVal = chrono::duration_cast<milliseconds>(tmpSecs).count();
   else if (newTime == s)
-    convertedVal = boost::chrono::duration_cast<seconds>(tmpSecs).count();
+    convertedVal = chrono::duration_cast<seconds>(tmpSecs).count();
   else if (newTime == min)
-    convertedVal = boost::chrono::duration_cast<minutes>(tmpSecs).count();
+    convertedVal = chrono::duration_cast<minutes>(tmpSecs).count();
   else if (newTime == h)
-    convertedVal = boost::chrono::duration_cast<hours>(tmpSecs).count();
+    convertedVal = chrono::duration_cast<hours>(tmpSecs).count();
   else if (newTime == d)
-    convertedVal = boost::chrono::duration_cast<days>(tmpSecs).count();
+    convertedVal = chrono::duration_cast<days>(tmpSecs).count();
   else if (newTime == w)
-    convertedVal = boost::chrono::duration_cast<weeks>(tmpSecs).count();
+    convertedVal = chrono::duration_cast<weeks>(tmpSecs).count();
   else if (newTime == month)
-    convertedVal = boost::chrono::duration_cast<months>(tmpSecs).count();
+    convertedVal = chrono::duration_cast<months>(tmpSecs).count();
   else if (newTime == year)
-    convertedVal = boost::chrono::duration_cast<years>(tmpSecs).count();
+    convertedVal = chrono::duration_cast<years>(tmpSecs).count();
 
   return convertedVal;
 }
