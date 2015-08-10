@@ -2,9 +2,24 @@ Source: kde-config-systemd
 Section: kde
 Priority: optional
 Maintainer: Shawn Sörbom <shawn@sorbom.com>
-Build-Depends: debhelper (>= 9), cmake, libboost-chrono1.55-dev, libboost-system1.55-dev, libboost-filesystem1.55-dev, kdelibs5-dev
+Build-Depends: cmake,
+               debhelper (>= 9),
+	       extra-cmake-modules,
+               libboost-chrono-dev,
+               libboost-dev,
+               libboost-filesystem-dev,
+               libboost-system-dev,
+               libkf5auth-dev,
+               libkf5configwidgets-dev,
+               libkf5coreaddons-dev,
+               libkf5i18n-dev,
+               libkf5service-dev,
+               libkf5widgetsaddons-dev,
+               libsystemd-dev,
+               qtbase5-dev,
+               pkg-config
 Standards-Version: 3.9.6
-Homepage: https://github.com/rthomsen/kcmsystemd
+Homepage: https://projects.kde.org/projects/playground/sysadmin/systemd-kcm
 Vcs-Git: https://github.com/shsorbom/kcmsystemd-debian.git
 Vcs-Browser: https://github.com/shsorbom/kcmsystemd-debian.git
 

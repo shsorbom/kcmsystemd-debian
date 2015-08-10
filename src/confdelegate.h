@@ -15,19 +15,27 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
  *******************************************************************************/
 
-#ifndef HELPER_H
-#define HELPER_H
+#ifndef CONFDELEGATE_H
+#define CONFDELEGATE_H
 
-#include <KAuth>
-using namespace KAuth;
+#include <QStyledItemDelegate>
 
-class Helper : public QObject
+class ConfDelegate : public QStyledItemDelegate
 {
   Q_OBJECT
+  
+public:
+  ConfDelegate(QObject *parent = 0);
 
-  public Q_SLOTS:
-    ActionReply save(const QVariantMap& args);
-    ActionReply dbusaction(const QVariantMap& args);
+  QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                        const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+  void setEditorData(QWidget *editor, const QModelIndex &index) const Q_DECL_OVERRIDE;
+  void setModelData(QWidget *editor, QAbstractItemModel *model,
+                    const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+  void updateEditorGeometry(QWidget *editor,
+      const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
 };
 
-#endif
+#endif // CONFDELEGATE_H

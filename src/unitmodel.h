@@ -15,19 +15,30 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
  *******************************************************************************/
 
-#ifndef HELPER_H
-#define HELPER_H
+#ifndef UNITMODEL_H
+#define UNITMODEL_H
 
-#include <KAuth>
-using namespace KAuth;
+#include <QAbstractTableModel>
 
-class Helper : public QObject
+#include "systemdunit.h"
+
+class UnitModel : public QAbstractTableModel
 {
   Q_OBJECT
+  
+public:
+  UnitModel(QObject *parent = 0);
+  UnitModel(QObject *parent = 0, const QList<SystemdUnit> *list = NULL, QString userBusPath = "");
+  int rowCount(const QModelIndex & parent = QModelIndex()) const;
+  int columnCount(const QModelIndex & parent = QModelIndex()) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
-  public Q_SLOTS:
-    ActionReply save(const QVariantMap& args);
-    ActionReply dbusaction(const QVariantMap& args);
+private:
+  QStringList getLastJrnlEntries(QString unit) const;
+  const QList<SystemdUnit> *unitList;
+  QString userBus;
 };
-
-#endif
+  
+#endif // UNITMODEL_H
+ 
