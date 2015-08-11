@@ -2,7 +2,7 @@ kde-config-systemd (1.2.1-1) unstable; urgency=medium
 
   * New upstream release
   * update debian control file to innclude new KF5 dependencies
-  * update debian copyright to comply with upstream license change
+  * update debian copyright to comply with upstream license change, and add new contributer
   * Change links to refer to new ustream site
   * Update debian/rules to account for the change in qt5 plugin path
   * Change from experimental to unstable repository

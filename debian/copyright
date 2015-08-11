@@ -3,8 +3,16 @@ Upstream-Name: systemd-kcm
 Source: https://projects.kde.org/projects/playground/sysadmin/systemd-kcm
 
 Files: *
-Copyright: 2013 Ragnar Thomsen <rthomsen6@gmail.com>
+Copyright: 2013-2015 Ragnar Thomsen <rthomsen6@gmail.com>
 License: GPL-2.0+
+
+Files: 
+    src/fsutil.h
+    src/fsutil.cpp
+    cmake/*
+Copyright: 2015 Johan Ouwerkerk <jm.ouwerkerk@gmail.com>
+License: GPL-2.0+
+
 
 Files: debian/*
 Copyright: 2014 Shawn Sörbom <shawn@sorbom.com>
