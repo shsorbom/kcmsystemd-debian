@@ -4,11 +4,7 @@ Priority: optional
 Maintainer: Shawn Sörbom <shawn@sorbom.com>
 Build-Depends: cmake,
                debhelper (>= 9),
-	       extra-cmake-modules,
-               libboost-chrono-dev,
-               libboost-dev,
-               libboost-filesystem-dev,
-               libboost-system-dev,
+	       extra-cmake-modules,              
                libkf5auth-dev,
                libkf5crash-dev,
                libkf5configwidgets-dev,
@@ -19,7 +15,7 @@ Build-Depends: cmake,
                libsystemd-dev,
                qtbase5-dev,
                pkg-config,
-               pkg-kde,
+               pkg-kde-tools,
                kio-dev
 Standards-Version: 3.9.6
 Homepage: https://projects.kde.org/projects/playground/sysadmin/systemd-kcm
