@@ -1,0 +1,38 @@
+From f4bc712daa4ed8e6e37c87e3d43070e5af223a46 Mon Sep 17 00:00:00 2001
+From: Ragnar Thomsen <rthomsen6@gmail.com>
+Date: Sun, 9 Aug 2015 13:06:55 +0200
+Subject: [PATCH 09/17] Use normalized SIGNAL/SLOT signatures
+
+As suggested by Krazy2.
+
+See also:
+https://marcmutz.wordpress.com/effective-qt/prefer-to-use-normalised-signalslot-signatures/
+---
+ src/kcmsystemd.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/kcmsystemd.cpp b/src/kcmsystemd.cpp
+index c59413c..b8ba140 100644
+--- a/src/kcmsystemd.cpp
++++ b/src/kcmsystemd.cpp
+@@ -133,7 +133,7 @@ kcmsystemd::kcmsystemd(QWidget *parent, const QVariantList &args) : KCModule(par
+   // logind
+   systembus.connect(connLogind, "", ifaceDbusProp,
+                     QStringLiteral("PropertiesChanged"), this,
+-                    SLOT(slotLogindPropertiesChanged(QString, QVariantMap, QStringList)));
++                    SLOT(slotLogindPropertiesChanged(QString,QVariantMap,QStringList)));
+   
+   // Get list of units
+   slotRefreshUnitsList(true, sys);
+@@ -257,7 +257,7 @@ void kcmsystemd::load()
+   }
+ 
+   // Connect signals to slots, which need to be after initializeInterface()
+-  connect(confModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(slotConfChanged(const QModelIndex &, const QModelIndex &)));
++  connect(confModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(slotConfChanged(QModelIndex,QModelIndex)));
+ }
+ 
+ void kcmsystemd::readConfFile(int fileindex)
+-- 
+2.1.4
+

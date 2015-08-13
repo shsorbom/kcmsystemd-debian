@@ -1,1 +1,12 @@
-aditional-upstream-changes.diff
+0002-Add-download-link-to-README.md.patch
+0003-SVN_SILENT-made-messages-.desktop-file-always-resolv.patch
+0004-Use-single-quotes-when-appending-single-chars-to-QSt.patch
+0005-Make-constructors-explicit-where-applicable.patch
+0006-Use-const-ref-in-foreach-loops.patch
+0007-Include-own-header-files-first.patch
+0008-Add-license-text-to-systemdunit.h.patch
+0009-Use-normalized-SIGNAL-SLOT-signatures.patch
+0010-Miscellaneous-minor-fixes-QLatin1String-usage-newlin.patch
+0011-Use-QPointer-for-modal-QDialog.patch
+0012-Use-single-quotes-when-appending-single-chars-to-QSt.patch
+0013-SVN_SILENT-made-messages-.desktop-file-always-resolv.patch

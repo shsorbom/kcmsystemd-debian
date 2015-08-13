@@ -1,0 +1,44 @@
+From 10577a6062f2981b56ea676f435a8919abea9f6c Mon Sep 17 00:00:00 2001
+From: Ragnar Thomsen <rthomsen6@gmail.com>
+Date: Mon, 10 Aug 2015 09:49:32 +0200
+Subject: [PATCH 12/17] Use single quotes when appending single-chars to
+ QStrings
+
+As suggested by Krazy2.
+---
+ src/confoption.cpp | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/confoption.cpp b/src/confoption.cpp
+index 2fe64ca..8f8f74a 100644
+--- a/src/confoption.cpp
++++ b/src/confoption.cpp
+@@ -472,14 +472,14 @@ QString confOption::getLineForFile() const
+           if (iter.value().toBool())
+             ret = QString(ret + iter.key() + ' ');
+         }
+-        return QString(realName + '=' + ret.trimmed() + "\n");
++        return QString(realName + '=' + ret.trimmed() + '\n');
+       }
+     }
+ 
+     else if (type == TIME)
+     {
+       if (value.toULongLong() == 0)
+-        return QString(realName + '=' + value.toString() + "\n");
++        return QString(realName + '=' + value.toString() + '\n');
+       else
+       {
+         if (defUnit == ns)
+@@ -510,7 +510,7 @@ QString confOption::getLineForFile() const
+       return QString(realName + '=' + value.toString() + "M\n");
+     }
+ 
+-    return QString(realName + '=' + value.toString() + "\n");
++    return QString(realName + '=' + value.toString() + '\n');
+   } // not default
+ }
+ 
+-- 
+2.1.4
+

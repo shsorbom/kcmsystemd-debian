@@ -1,0 +1,61 @@
+From 33e560152eb403c6f4f3af0b779f1e9b0dc2d1f9 Mon Sep 17 00:00:00 2001
+From: Ragnar Thomsen <rthomsen6@gmail.com>
+Date: Sun, 9 Aug 2015 13:13:56 +0200
+Subject: [PATCH 10/17] Miscellaneous minor fixes (QLatin1String usage,
+ newline)
+
+As suggested by Krazy2.
+---
+ src/kcm-systemd-features.h.cmake |  2 +-
+ src/kcmsystemd.cpp               | 10 +++++++---
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/src/kcm-systemd-features.h.cmake b/src/kcm-systemd-features.h.cmake
+index 50fdc33..168991d 100644
+--- a/src/kcm-systemd-features.h.cmake
++++ b/src/kcm-systemd-features.h.cmake
+@@ -3,4 +3,4 @@
+ 
+ #cmakedefine01 HAVE_CXX11_CHRONO
+ 
+-#endif
+\ No newline at end of file
++#endif
+diff --git a/src/kcmsystemd.cpp b/src/kcmsystemd.cpp
+index b8ba140..c1be923 100644
+--- a/src/kcmsystemd.cpp
++++ b/src/kcmsystemd.cpp
+@@ -717,15 +717,19 @@ void kcmsystemd::slotRefreshTimerList()
+   // Iterate through system unitlist and add timers to the model
+   foreach (const SystemdUnit &unit, unitslist)
+   {
+-    if (unit.id.endsWith(".timer") && unit.load_state != "unloaded")
++    if (unit.id.endsWith(QLatin1String(".timer")) &&
++        unit.load_state != QLatin1String("unloaded")) {
+       timerModel->appendRow(buildTimerListRow(unit, unitslist, sys));
++    }
+   }
+ 
+   // Iterate through user unitlist and add timers to the model
+   foreach (const SystemdUnit &unit, userUnitslist)
+   {
+-    if (unit.id.endsWith(".timer") && unit.load_state != "unloaded")
++    if (unit.id.endsWith(QLatin1String(".timer")) &&
++        unit.load_state != QLatin1String("unloaded")) {
+       timerModel->appendRow(buildTimerListRow(unit, userUnitslist, user));
++    }
+   }
+ 
+   // Update the left and passed columns
+@@ -774,7 +778,7 @@ QList<QStandardItem *> kcmsystemd::buildTimerListRow(const SystemdUnit &unit, co
+     // Convert the monotonic system clock to microseconds
+     qlonglong now_mono_usec = ts.tv_sec * 1000000 + ts.tv_nsec / 1000;
+ 
+-    // And substract it
++    // And subtract it.
+     time = time.addMSecs(-now_mono_usec/1000);
+   }
+ 
+-- 
+2.1.4
+

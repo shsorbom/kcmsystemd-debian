@@ -1,0 +1,135 @@
+From 7627edc1ce6c629c9578a757988a6a00c50f387e Mon Sep 17 00:00:00 2001
+From: Ragnar Thomsen <rthomsen6@gmail.com>
+Date: Sun, 9 Aug 2015 13:00:36 +0200
+Subject: [PATCH 07/17] Include own header files first
+
+As suggested by Krazy2.
+---
+ src/confdelegate.cpp | 4 ++--
+ src/confmodel.cpp    | 4 ++--
+ src/confoption.cpp   | 4 ++--
+ src/confparms.cpp    | 6 +++---
+ src/kcmsystemd.cpp   | 2 +-
+ src/unitmodel.cpp    | 4 ++--
+ 6 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/src/confdelegate.cpp b/src/confdelegate.cpp
+index 25d5fa2..4a0c055 100644
+--- a/src/confdelegate.cpp
++++ b/src/confdelegate.cpp
+@@ -15,14 +15,14 @@
+  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
+  *******************************************************************************/
+ 
++#include "confdelegate.h"
++
+ #include <QDebug>
+ #include <QSpinBox>
+ #include <QComboBox>
+ #include <QLineEdit>
+ #include <QStandardItemModel>
+ 
+-#include "confdelegate.h"
+-
+ ConfDelegate::ConfDelegate(QObject *parent, const QList<confOption> *confOptList)
+     : QStyledItemDelegate(parent)
+     , m_optList(confOptList)
+diff --git a/src/confmodel.cpp b/src/confmodel.cpp
+index c995040..48f29d8 100644
+--- a/src/confmodel.cpp
++++ b/src/confmodel.cpp
+@@ -15,12 +15,12 @@
+  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
+  *******************************************************************************/
+ 
++#include "confmodel.h"
++
+ #include <QFont>
+ 
+ #include <KLocalizedString>
+ 
+-#include "confmodel.h"
+-
+ ConfModel::ConfModel(QObject *parent, QList<confOption> *confOptList)
+  : QAbstractTableModel(parent)
+  , m_optList(confOptList)
+diff --git a/src/confoption.cpp b/src/confoption.cpp
+index b8021d1..2fe64ca 100644
+--- a/src/confoption.cpp
++++ b/src/confoption.cpp
+@@ -15,11 +15,11 @@
+  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
+  *******************************************************************************/
+ 
+-#include <QDebug>
+-
+ #include "confoption.h"
+ #include "fsutil.h"
+ 
++#include <QDebug>
++
+ // Initialize two static class members
+ QStringList confOption::capabilities = QStringList() << "CAP_AUDIT_CONTROL" << "CAP_AUDIT_WRITE" << "CAP_BLOCK_SUSPEND" << "CAP_CHOWN"
+                                            << "CAP_DAC_OVERRIDE" << "CAP_DAC_READ_SEARCH" << "CAP_FOWNER" << "CAP_FSETID" 
+diff --git a/src/confparms.cpp b/src/confparms.cpp
+index cbd1b16..3143bdf 100644
+--- a/src/confparms.cpp
++++ b/src/confparms.cpp
+@@ -15,13 +15,13 @@
+  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
+  *******************************************************************************/
+ 
++#include "confparms.h"
++#include "fsutil.h"
++
+ #include <QThread>
+ 
+ #include <KLocalizedString>
+ 
+-#include "confparms.h"
+-#include "fsutil.h"
+-
+ QList<confOption> getConfigParms(const int systemdVersion)
+ {
+   // Creates an instance of confOption for each option in the systemd
+diff --git a/src/kcmsystemd.cpp b/src/kcmsystemd.cpp
+index 4fd00d4..c59413c 100644
+--- a/src/kcmsystemd.cpp
++++ b/src/kcmsystemd.cpp
+@@ -15,10 +15,10 @@
+  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
+  *******************************************************************************/
+ 
++#include "config.h"
+ #include "kcmsystemd.h"
+ #include "confparms.h"
+ #include "fsutil.h"
+-#include "config.h"
+ 
+ #include <unistd.h>
+ 
+diff --git a/src/unitmodel.cpp b/src/unitmodel.cpp
+index bba7929..c1f8aae 100644
+--- a/src/unitmodel.cpp
++++ b/src/unitmodel.cpp
+@@ -15,6 +15,8 @@
+  * with this program. If not, see <http://www.gnu.org/licenses/>.              *
+  *******************************************************************************/
+ 
++#include "unitmodel.h"
++
+ #include <QtDBus/QtDBus>
+ #include <QColor>
+ #include <KLocalizedString>
+@@ -22,8 +24,6 @@
+ 
+ #include <systemd/sd-journal.h>
+ 
+-#include "unitmodel.h"
+-
+ UnitModel::UnitModel(QObject *parent)
+  : QAbstractTableModel(parent)
+ {
+-- 
+2.1.4
+

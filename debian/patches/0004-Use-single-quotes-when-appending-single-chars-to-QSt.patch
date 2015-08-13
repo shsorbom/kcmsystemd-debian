@@ -1,0 +1,251 @@
+From f703dba2060eab91d3a0a74fe58e121295cbbd76 Mon Sep 17 00:00:00 2001
+From: Ragnar Thomsen <rthomsen6@gmail.com>
+Date: Sun, 9 Aug 2015 12:35:15 +0200
+Subject: [PATCH 04/17] Use single quotes when appending single-chars to
+ QStrings etc.
+
+As suggested by Krazy2. It is more efficient to use single-quotes than
+double-quotes when appending single-chars to QStrings, etc.
+---
+ src/confoption.cpp    | 44 ++++++++++++++++++++++----------------------
+ src/helper/helper.cpp |  2 +-
+ src/kcmsystemd.cpp    | 20 ++++++++++----------
+ src/unitmodel.cpp     |  4 ++--
+ 4 files changed, 35 insertions(+), 35 deletions(-)
+
+diff --git a/src/confoption.cpp b/src/confoption.cpp
+index b91007c..ef0e8eb 100644
+--- a/src/confoption.cpp
++++ b/src/confoption.cpp
+@@ -53,7 +53,7 @@ confOption::confOption(QVariantMap map)
+ {
+   file = static_cast<confFile>(map["file"].toInt());
+   realName = map["name"].toString();
+-  uniqueName = QString(map["name"].toString() + "_" + QString::number(file));
++  uniqueName = QString(map["name"].toString() + '_' + QString::number(file));
+   type = static_cast<settingType>(map["type"].toInt());
+   defVal = map["defVal"];
+   possibleVals = map["possibleVals"].toStringList();
+@@ -97,7 +97,7 @@ int confOption::setValueFromFile(QString line)
+ {
+   // Used to set values in confOptions from a file line
+   
+-  QString rval = line.section("=",1).trimmed();
++  QString rval = line.section('=',1).trimmed();
+ 
+   qDebug() << "setting " << realName << " to " << rval << " (from file)";
+     
+@@ -159,7 +159,7 @@ int confOption::setValueFromFile(QString line)
+   {
+     QVariantMap map;
+ 
+-    QStringList readList = rval.split(" ", QString::SkipEmptyParts);
++    QStringList readList = rval.split(' ', QString::SkipEmptyParts);
+     for (int i = 0; i < readList.size(); ++i)
+     {
+       if (!possibleVals.contains(readList.at(i)))
+@@ -433,7 +433,7 @@ QString confOption::getValueAsString() const
+       if (iter.value() == true && mapAsString.isEmpty())
+         mapAsString = QString(iter.key());
+       else if (iter.value() == true)
+-        mapAsString = QString(mapAsString + " " + iter.key());
++        mapAsString = QString(mapAsString + ' ' + iter.key());
+     }
+     return mapAsString;
+   }
+@@ -447,7 +447,7 @@ QString confOption::getLineForFile() const
+   if (value == defVal)
+   {
+     // value is set to default
+-    return QString("#" + realName + "=\n");
++    return QString('#' + realName + "=\n");
+   }
+   else
+   {
+@@ -455,9 +455,9 @@ QString confOption::getLineForFile() const
+     if (type == BOOL)
+     {
+       if (value.toBool())
+-        return QString(realName + "=" + "yes\n");
++        return QString(realName + '=' + "yes\n");
+       else
+-        return QString(realName + "=" + "no\n");
++        return QString(realName + '=' + "no\n");
+     }
+ 
+     else if (type == MULTILIST)
+@@ -469,47 +469,47 @@ QString confOption::getLineForFile() const
+         for(QVariantMap::const_iterator iter = map.constBegin(); iter != map.constEnd(); ++iter)
+         {
+           if (iter.value().toBool())
+-            ret = QString(ret + iter.key() + " ");
++            ret = QString(ret + iter.key() + ' ');
+         }
+-        return QString(realName + "=" + ret.trimmed() + "\n");
++        return QString(realName + '=' + ret.trimmed() + "\n");
+       }
+     }
+ 
+     else if (type == TIME)
+     {
+       if (value.toULongLong() == 0)
+-        return QString(realName + "=" + value.toString() + "\n");
++        return QString(realName + '=' + value.toString() + "\n");
+       else
+       {
+         if (defUnit == ns)
+-          return QString(realName + "=" + value.toString() + "ns\n");
++          return QString(realName + '=' + value.toString() + "ns\n");
+         else if (defUnit == us)
+-          return QString(realName + "=" + value.toString() + "us\n");
++          return QString(realName + '=' + value.toString() + "us\n");
+         else if (defUnit == ms)
+-          return QString(realName + "=" + value.toString() + "ms\n");
++          return QString(realName + '=' + value.toString() + "ms\n");
+         else if (defUnit == s)
+-          return QString(realName + "=" + value.toString() + "s\n");
++          return QString(realName + '=' + value.toString() + "s\n");
+         else if (defUnit == min)
+-          return QString(realName + "=" + value.toString() + "min\n");
++          return QString(realName + '=' + value.toString() + "min\n");
+         else if (defUnit == h)
+-          return QString(realName + "=" + value.toString() + "h\n");
++          return QString(realName + '=' + value.toString() + "h\n");
+         else if (defUnit == d)
+-          return QString(realName + "=" + value.toString() + "d\n");
++          return QString(realName + '=' + value.toString() + "d\n");
+         else if (defUnit == w)
+-          return QString(realName + "=" + value.toString() + "w\n");
++          return QString(realName + '=' + value.toString() + "w\n");
+         else if (defUnit == month)
+-          return QString(realName + "=" + value.toString() + "month\n");
++          return QString(realName + '=' + value.toString() + "month\n");
+         else if (defUnit == year)
+-          return QString(realName + "=" + value.toString() + "year\n");
++          return QString(realName + '=' + value.toString() + "year\n");
+        }
+     }
+ 
+     else if (type == SIZE)
+     {
+-      return QString(realName + "=" + value.toString() + "M\n");
++      return QString(realName + '=' + value.toString() + "M\n");
+     }
+ 
+-    return QString(realName + "=" + value.toString() + "\n");
++    return QString(realName + '=' + value.toString() + "\n");
+   } // not default
+ }
+ 
+diff --git a/src/helper/helper.cpp b/src/helper/helper.cpp
+index 30dcce6..b491c26 100644
+--- a/src/helper/helper.cpp
++++ b/src/helper/helper.cpp
+@@ -30,7 +30,7 @@ ActionReply Helper::save(const QVariantMap& args)
+   for(QVariantMap::const_iterator iter = files.constBegin(); iter != files.constEnd(); ++iter)
+   {
+     QString contents = iter.value().toString();
+-    QFile file(args["etcDir"].toString() + "/" + iter.key());
++    QFile file(args["etcDir"].toString() + '/' + iter.key());
+     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+       reply = ActionReply::HelperErrorReply();
+       reply.addData("errorDescription", file.errorString());
+diff --git a/src/kcmsystemd.cpp b/src/kcmsystemd.cpp
+index e11e996..f521831 100644
+--- a/src/kcmsystemd.cpp
++++ b/src/kcmsystemd.cpp
+@@ -262,7 +262,7 @@ void kcmsystemd::load()
+ 
+ void kcmsystemd::readConfFile(int fileindex)
+ {
+-  QFile file (etcDir + "/" + listConfFiles.at(fileindex));
++  QFile file (etcDir + '/' + listConfFiles.at(fileindex));
+   if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+   {
+     QTextStream in(&file);
+@@ -273,18 +273,18 @@ void kcmsystemd::readConfFile(int fileindex)
+       if (!line.startsWith('#') && !line.startsWith('[') && !line.isEmpty())
+       {
+         // qDebug() << "line: " << line;
+-        int index = confOptList.indexOf(confOption(QString(line.section("=",0,0).trimmed() + "_" + QString::number(fileindex))));
++        int index = confOptList.indexOf(confOption(QString(line.section('=',0,0).trimmed() + '_' + QString::number(fileindex))));
+         if (index >= 0)
+         {
+           if (confOptList[index].setValueFromFile(line) == -1)
+             displayMsgWidget(KMessageWidget::Warning,
+-                             i18n("\"%1\" is not a valid value for %2. Using default value for this parameter.", line.section("=",1).trimmed(), confOptList.at(index).realName));
++                             i18n("\"%1\" is not a valid value for %2. Using default value for this parameter.", line.section('=',1).trimmed(), confOptList.at(index).realName));
+         }
+       }
+       line = in.readLine();
+     } // read lines until empty
+ 
+-    qDebug() << QString("Successfully read " + etcDir + "/" + listConfFiles.at(fileindex));
++    qDebug() << QString("Successfully read " + etcDir + '/' + listConfFiles.at(fileindex));
+   } // if file open
+   else
+     displayMsgWidget(KMessageWidget::Warning,
+@@ -555,14 +555,14 @@ void kcmsystemd::slotCmbUnitTypes(int index)
+ 
+   if (QObject::sender()->objectName() == "cmbUnitTypes")
+   {
+-    systemUnitFilterModel->addFilterRegExp(unitType, "(" + unitTypeSufx.at(index) + ")$");
++    systemUnitFilterModel->addFilterRegExp(unitType, '(' + unitTypeSufx.at(index) + ")$");
+     systemUnitFilterModel->invalidate();
+     ui.tblUnits->sortByColumn(ui.tblUnits->horizontalHeader()->sortIndicatorSection(),
+                               ui.tblUnits->horizontalHeader()->sortIndicatorOrder());
+   }
+   else if (QObject::sender()->objectName() == "cmbUserUnitTypes")
+   {
+-    userUnitFilterModel->addFilterRegExp(unitType, "(" + unitTypeSufx.at(index) + ")$");
++    userUnitFilterModel->addFilterRegExp(unitType, '(' + unitTypeSufx.at(index) + ")$");
+     userUnitFilterModel->invalidate();
+     ui.tblUserUnits->sortByColumn(ui.tblUserUnits->horizontalHeader()->sortIndicatorSection(),
+                                   ui.tblUserUnits->horizontalHeader()->sortIndicatorOrder());
+@@ -1158,8 +1158,8 @@ bool kcmsystemd::eventFilter(QObject *obj, QEvent* event)
+           if (!tty.isEmpty())
+             path = tty;
+           else if (!remoteHost.isEmpty())
+-            path = getDbusProperty("Name", logdSession, spath).toString() + "@" + remoteHost;
+-          toolTipText.append(" (" + path + ")");
++            path = getDbusProperty("Name", logdSession, spath).toString() + '@' + remoteHost;
++          toolTipText.append(" (" + path + ')');
+         }
+         toolTipText.append(i18n("<br><b>Class:</b> %1", getDbusProperty("Class", logdSession, spath).toString()));
+         toolTipText.append(i18n("<br><b>State:</b> %1", getDbusProperty("State", logdSession, spath).toString()));
+@@ -1429,8 +1429,8 @@ QList<SystemdUnit> kcmsystemd::getUnitsFromDbus(dbusBus bus)
+           SystemdUnit unit;
+           unit.id = unitfileslist.at(i).name.section('/',-1);
+           unit.load_state = "unloaded";
+-          unit.active_state = "-";
+-          unit.sub_state = "-";
++          unit.active_state = '-';
++          unit.sub_state = '-';
+           unit.unit_file = unitfileslist.at(i).name;
+           unit.unit_file_status= unitfileslist.at(i).status;
+           list.append(unit);
+diff --git a/src/unitmodel.cpp b/src/unitmodel.cpp
+index 6f489cb..bba7929 100644
+--- a/src/unitmodel.cpp
++++ b/src/unitmodel.cpp
+@@ -266,7 +266,7 @@ QStringList UnitModel::getLastJrnlEntries(QString unit) const
+       r = sd_journal_get_data(journal, "PRIORITY", &data, &length);
+       if (r == 0)
+       {
+-        int prio = QString::fromUtf8((const char *)data, length).section("=",1).toInt();
++        int prio = QString::fromUtf8((const char *)data, length).section('=',1).toInt();
+         if (prio <= 3)
+           line.append("<span style='color:tomato;'>");
+         else if (prio == 4)
+@@ -279,7 +279,7 @@ QStringList UnitModel::getLastJrnlEntries(QString unit) const
+       r = sd_journal_get_data(journal, "MESSAGE", &data, &length);
+       if (r == 0)
+       {
+-        line.append(": " + QString::fromUtf8((const char *)data, length).section("=",1) + "</span>");
++        line.append(": " + QString::fromUtf8((const char *)data, length).section('=',1) + "</span>");
+         if (line.length() > 195)
+           line = QString(line.left(195) + "..." + "</span>");
+         reply << line;
+-- 
+2.1.4
+

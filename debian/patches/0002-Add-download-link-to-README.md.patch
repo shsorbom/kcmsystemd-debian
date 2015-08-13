@@ -1,0 +1,26 @@
+From 502075474888d6ded63eb3794a52f718224508d7 Mon Sep 17 00:00:00 2001
+From: Ragnar Thomsen <rthomsen6@gmail.com>
+Date: Sat, 8 Aug 2015 14:05:40 +0200
+Subject: [PATCH 02/17] Add download link to README.md
+
+---
+ README.md | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/README.md b/README.md
+index c530e3e..3af5898 100644
+--- a/README.md
++++ b/README.md
+@@ -47,6 +47,9 @@ Contributions from:
+ Website:
+ https://projects.kde.org/projects/playground/sysadmin/systemd-kcm/
+ 
++Source packages can be downloaded at:
++http://download.kde.org/stable/systemd-kcm/
++
+ Please report bugs and feature requests at:
+ https://bugs.kde.org/
+ 
+-- 
+2.1.4
+
