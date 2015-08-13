@@ -4,19 +4,19 @@ Priority: optional
 Maintainer: Shawn Sörbom <shawn@sorbom.com>
 Build-Depends: cmake,
                debhelper (>= 9),
-	       extra-cmake-modules,              
+               extra-cmake-modules,
+               kio-dev,
                libkf5auth-dev,
-               libkf5crash-dev,
                libkf5configwidgets-dev,
                libkf5coreaddons-dev,
+               libkf5crash-dev,
                libkf5i18n-dev,
                libkf5service-dev,
                libkf5widgetsaddons-dev,
                libsystemd-dev,
-               qtbase5-dev,
                pkg-config,
                pkg-kde-tools,
-               kio-dev
+               qtbase5-dev
 Standards-Version: 3.9.6
 Homepage: https://projects.kde.org/projects/playground/sysadmin/systemd-kcm
 Vcs-Git: https://github.com/shsorbom/kcmsystemd-debian.git
@@ -24,7 +24,9 @@ Vcs-Browser: https://github.com/shsorbom/kcmsystemd-debian.git
 
 Package: kde-config-systemd
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, systemd (>= 215)
+Depends: systemd (>= 215),
+         ${misc:Depends},
+         ${shlibs:Depends}
 Description: KDE control center module for Systemd
  This package is a KDE Control Center module for the systemd daemon.
  It is capable of starting and stopping systemd units.

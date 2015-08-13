@@ -6,7 +6,7 @@ Files: *
 Copyright: 2013-2015 Ragnar Thomsen <rthomsen6@gmail.com>
 License: GPL-2.0+
 
-Files: 
+Files:
     src/fsutil.h
     src/fsutil.cpp
     cmake/*
@@ -51,4 +51,3 @@ License: GPL-3.0+
  .
  On Debian systems, the complete text of the GNU General
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
-
