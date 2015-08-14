@@ -6,7 +6,7 @@ kde-config-systemd (1.2.1-1) unstable; urgency=medium
   * Add new contributor in debian copyright
   * Change links to refer to new ustream site
   * Update debian/rules to account for the change in qt5 plugin path
-  * Upload to Unstable
+  * Upload to unstable
   * Add kde-pkg-tools to dependencies
   * Drop libboost dependencies
 
