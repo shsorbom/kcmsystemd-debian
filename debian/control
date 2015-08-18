@@ -23,7 +23,7 @@ Vcs-Git: https://github.com/shsorbom/kcmsystemd-debian.git
 Vcs-Browser: https://github.com/shsorbom/kcmsystemd-debian.git
 
 Package: kde-config-systemd
-Architecture: any
+Architecture: linux-any
 Depends: systemd (>= 215),
          ${misc:Depends},
          ${shlibs:Depends}
