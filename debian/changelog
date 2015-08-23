@@ -1,3 +1,10 @@
+kde-config-systemd (1.2.1-2) unstable; urgency=medium
+
+  * Fix dh_auto_configure rule to work on non-amd64 architectures
+  * Only build on Linux-based architectures
+
+ -- Shawn Sörbom <shawn@sorbom.com>  Sun, 23 Aug 2015 11:38:12 -0700
+
 kde-config-systemd (1.2.1-1) unstable; urgency=medium
 
   * New upstream release
