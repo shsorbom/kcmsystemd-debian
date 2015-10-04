@@ -16,7 +16,8 @@ Build-Depends: cmake,
                libsystemd-dev,
                pkg-config,
                pkg-kde-tools,
-               qtbase5-dev
+               qtbase5-dev,
+               systemd
 Standards-Version: 3.9.6
 Homepage: https://projects.kde.org/projects/playground/sysadmin/systemd-kcm
 Vcs-Git: https://github.com/shsorbom/kcmsystemd-debian.git

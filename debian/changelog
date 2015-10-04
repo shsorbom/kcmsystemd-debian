@@ -1,3 +1,9 @@
+kde-config-systemd (1.2.1-3) unstable; urgency=medium
+
+  * Add systemd to build dependencies (Closes: 799593)
+
+ -- Shawn Sörbom <shawn@sorbom.com>  Mon, 28 Sep 2015 12:54:20 -0700
+
 kde-config-systemd (1.2.1-2) unstable; urgency=medium
 
   * Fix dh_auto_configure rule to work on non-amd64 architectures
