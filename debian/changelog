@@ -1,3 +1,9 @@
+kde-config-systemd (1.2.1-4) UNRELEASED; urgency=medium
+
+  * Trim trailing whitespace.
+
+ -- Debian Janitor <janitor@jelmer.uk>  Wed, 20 Nov 2019 21:04:15 +0000
+
 kde-config-systemd (1.2.1-3) unstable; urgency=medium
 
   * Add systemd to build dependencies (Closes: 799593)
@@ -15,7 +21,7 @@ kde-config-systemd (1.2.1-1) unstable; urgency=medium
 
   * New upstream release
   * Update debian control file to innclude new KF5 dependencies
-  * Update debian copyright to comply with upstream license change 
+  * Update debian copyright to comply with upstream license change
   * Add new contributor in debian copyright
   * Change links to refer to new ustream site
   * Update debian/rules to account for the change in qt5 plugin path
@@ -27,6 +33,6 @@ kde-config-systemd (1.2.1-1) unstable; urgency=medium
 
 kde-config-systemd (0.7.0-1) experimental; urgency=low
 
-  * Initial release (Closes: #773617)  
+  * Initial release (Closes: #773617)
 
  -- Shawn Sörbom <shawn@sorbom.com>  Mon, 29 Dec 2014 00:03:06 -0800
