@@ -2,6 +2,7 @@ kde-config-systemd (1.2.1-4) UNRELEASED; urgency=medium
 
   * Trim trailing whitespace.
   * Use secure copyright file specification URI.
+  * Use secure URI in debian/watch.
 
  -- Debian Janitor <janitor@jelmer.uk>  Wed, 20 Nov 2019 21:04:15 +0000
 

@@ -1,2 +1,2 @@
 version=3
-http://download.kde.org/stable/systemd-kcm/ systemd-kcm-?(\d\S+)\.tar\.(?:bz2|gz|xz)
+https://download.kde.org/stable/systemd-kcm/ systemd-kcm-?(\d\S+)\.tar\.(?:bz2|gz|xz)
