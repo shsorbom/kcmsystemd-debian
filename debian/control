@@ -3,7 +3,7 @@ Section: kde
 Priority: optional
 Maintainer: Shawn Sörbom <shawn@sorbom.com>
 Build-Depends: cmake,
-               debhelper (>= 12~),
+               debhelper-compat (= 12),
                extra-cmake-modules,
                kio-dev,
                libkf5auth-dev,
